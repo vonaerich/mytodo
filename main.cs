@@ -13,8 +13,16 @@ app.MapGet("/todos", () => Results.Ok(todos));
 
 app.MapPost("/todos", (Todo todo) => 
 {
+  if(todo == null)
+  {
+    return Results.BadRequest();
+  }
+
+  var nextId = todos.LastOrDefault()?.Id + 1 ?? 1;
+  todo.Id = nextId;
   todos.Add(todo);
-  Results.NoContent();
+
+  return Results.NoContent();
 });
 
 app.Run("http://0.0.0.0:5001");
