@@ -11,7 +11,7 @@ var todos = new List<Todo>
 
 app.MapGet("/todos", () => Results.Ok(todos));
 
-app.MapPost("/todos", (Todo todo) => 
+app.MapPost("/todos", (TodoRequest todo) => 
 {
   if(todo == null)
   {
@@ -19,9 +19,20 @@ app.MapPost("/todos", (Todo todo) =>
   }
 
   var nextId = todos.LastOrDefault()?.Id + 1 ?? 1;
-  todo.Id = nextId;
-  todos.Add(todo);
+  todos.Add(new Todo { Id = nextId, TodoItem = todo.TodoItem });
 
+  return Results.NoContent();
+});
+
+app.MapDelete("/todos/{id}", (int id) => 
+{
+  var todo = todos.FirstOrDefault(a => a.Id == id);
+  if(todo == null)
+  {
+    return Results.NotFound();
+  }
+
+  todos.Remove(todo);
   return Results.NoContent();
 });
 
