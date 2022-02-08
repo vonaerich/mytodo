@@ -11,4 +11,10 @@ var todos = new List<Todo>
 
 app.MapGet("/todos", () => Results.Ok(todos));
 
+app.MapPost("/todos", (Todo todo) => 
+{
+  todos.Add(todo);
+  Results.NoContent();
+});
+
 app.Run("http://0.0.0.0:5001");
